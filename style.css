@@ -45,7 +45,7 @@ header p {
 }
 
 .subject-card {
-    background: white;
+    background: rgb(255, 255, 255);
     border-radius: 1.2rem;
     padding: 2rem;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
@@ -163,5 +163,5 @@ header p {
 
 .creator-name {
     font-weight: 600;
-    color: #4f46e5; /* Matches your theme's indigo color */
+    color: blue; /* Matches your theme's indigo color */
 }
