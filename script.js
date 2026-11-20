@@ -25,7 +25,7 @@ const students = {
     "U13WC25S0024": "CHANDANA NANDIHALLI",
     "U13WC25S0025": "C NAVEENA",
     "U13WC25S0026": "PRASHANTHA KAMMARA",
-    "U13WC25S0027": "REVANASIDDESHA M",
+    "U13WC25S0027": "SIDDA",
     "U13WC25S0028": "RAKESH KOTI L",
     "U13WC25S0029": "M SHIVRAJ",
     "U13WC25S0030": "RANGASWAMY M",
@@ -34,8 +34,7 @@ const students = {
     "U13WC25S0033": "VISHWESHWARAIAH H M",
     "U13WC25S0034": "GANESH K M",
     "U13WC25S0035": "KOTRESH UTTANGI",
-    "U13WC25S0036": "ANUSHA",
-
+    "U13WC25S0036": "ANUSHA"
 };
 
 const LOG_URL = "https://script.google.com/macros/s/AKfycbwshYRWzmLQ_imHb2XH-BdU2H83YJKeOu5NFS6Rc-UpiWcWV83512fFniAVqXX2jtMurg/exec";
@@ -53,11 +52,14 @@ function normalize(text) {
 loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const enteredUUCMS = normalize(document.getElementById("uucms").value);
-    const enteredName = normalize(document.getElementById("student-name").value);
+    const rawUUCMS = document.getElementById("uucms").value.trim();
+    const rawName = document.getElementById("student-name").value.trim();
+
+    const enteredUUCMS = normalize(rawUUCMS);
+    const enteredName = normalize(rawName);
 
     if (students[enteredUUCMS] && normalize(students[enteredUUCMS]) === enteredName) {
-        // Send login details to Google Sheets in the background
+        // Log successful login
         fetch(LOG_URL, {
             method: "POST",
             mode: "no-cors",
@@ -71,6 +73,16 @@ loginForm.addEventListener("submit", function (e) {
         mainContent.style.display = "block";
         errorMsg.textContent = "";
     } else {
+        // Log failed login attempt
+        fetch(LOG_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                uucms: rawUUCMS || "EMPTY",
+                name: "[FAILED] " + (rawName || "EMPTY")
+            })
+        });
+
         errorMsg.textContent = "Invalid UUCMS Number or Name. Please try again.";
     }
 });
