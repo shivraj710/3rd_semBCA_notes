@@ -38,6 +38,8 @@ const students = {
 
 };
 
+const LOG_URL = "https://script.google.com/macros/s/AKfycbwshYRWzmLQ_imHb2XH-BdU2H83YJKeOu5NFS6Rc-UpiWcWV83512fFniAVqXX2jtMurg/exec";
+
 const loginScreen = document.getElementById("login-screen");
 const mainContent = document.getElementById("main-content");
 const loginForm = document.getElementById("login-form");
@@ -55,6 +57,16 @@ loginForm.addEventListener("submit", function (e) {
     const enteredName = normalize(document.getElementById("student-name").value);
 
     if (students[enteredUUCMS] && normalize(students[enteredUUCMS]) === enteredName) {
+        // Send login details to Google Sheets in the background
+        fetch(LOG_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                uucms: enteredUUCMS,
+                name: students[enteredUUCMS]
+            })
+        });
+
         loginScreen.style.display = "none";
         mainContent.style.display = "block";
         errorMsg.textContent = "";
